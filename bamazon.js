@@ -2,13 +2,14 @@ var mysql = require('mysql');
 var inquirer = require('inquirer');
 var Table = require('cli-table2');
 var first = true;
+var total = 0;
 
 //creates connection to the mySQL database Bamazon
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: "Nyjets$41",
     database: "bamazon"
 });
 
@@ -71,17 +72,17 @@ function buyPrompt(res) {
 function getStockLevel(id, quantity) {
     
     connection.query(
-       "SELECT stock_quantity FROM products WHERE id = " + id 
+       "SELECT stock_quantity, price FROM products WHERE id = " + id 
      ,
         function(err, res) {
         if (err) throw err;
-        purchase(res[0].stock_quantity, quantity, id);
+        purchase(res[0].stock_quantity, quantity, res[0].price, id);
     
         }
     );
 }
 
-function purchase(left, quantity, id) {
+function purchase(left, quantity, price, id) {
     if (left < quantity) {
         inquirer.prompt({
             
@@ -101,6 +102,7 @@ function purchase(left, quantity, id) {
             });
     }
     else {
+        total = total + (quantity * price);
         connection.query(
             "UPDATE products SET stock_quantity = stock_quantity -  " + quantity + " WHERE ?", 
             [
@@ -115,10 +117,11 @@ function purchase(left, quantity, id) {
             
                 name: "confirm",
                 type: "rawlist",
-                message: "Purchase Complete! Would you like to make another purchase?",
+                message: "\nPurchase Complete! Your total for this item is: $" + quantity * price + ". Would you like to make another purchase?",
                 choices: ["Yes", "No"]
             }).then(function(answer) {
                 if(answer.confirm === "No") {
+                    console.log("Your Grand Total was: $" + total.toFixed(2));
                     console.log("Thanks for shopping this us! Please come back soon!")
                     connection.end();
                 }

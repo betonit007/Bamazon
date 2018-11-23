@@ -22,4 +22,4 @@ WHERE id = 1;
 UPDATE products SET stock_quantity = 50
 WHERE id = 1;
 
-SELECT stock_quantity FROM products WHERE id = 4; 
+SELECT stock_quantity, price FROM products WHERE id = 4; 
