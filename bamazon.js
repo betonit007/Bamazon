@@ -15,12 +15,8 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    
     seeTable();
-    
-
 });
-
 
 
 ////////////functions///////////////////////////////////////////////////////////
@@ -40,11 +36,8 @@ function seeTable() {
             console.log(table.toString());
             if(first) {
             buyPrompt(res);
-        
             }
     });
-
-   
 }
 
 function buyPrompt(res) {
@@ -65,7 +58,6 @@ function buyPrompt(res) {
         id = answer.id;
         quantity = answer.quantity;
         getStockLevel(answer.id, answer.quantity);
-            
    })
 }
 
@@ -98,7 +90,6 @@ function purchase(left, quantity, price, id) {
                 else {
                     seeTable();
                 }
-                
             });
     }
     else {
@@ -121,7 +112,7 @@ function purchase(left, quantity, price, id) {
                 choices: ["Yes", "No"]
             }).then(function(answer) {
                 if(answer.confirm === "No") {
-                    console.log("Your Grand Total was: $" + total.toFixed(2));
+                    console.log("\nYour Grand Total was: $" + total.toFixed(2));
                     console.log("Thanks for shopping this us! Please come back soon!")
                     connection.end();
                 }

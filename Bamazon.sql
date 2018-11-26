@@ -14,12 +14,15 @@ CREATE TABLE products(
 INSERT INTO products (product_name, department_name, price, stock_quantity) 
 VALUES('PlayStation 4', 'Electronics', 179.99, 65);
 
-SELECT * FROM products;
+SELECT stock_quantity, price FROM products WHERE id = 4;
 
 UPDATE products SET stock_quantity = stock_quantity - 1
 WHERE id = 1;
 
 UPDATE products SET stock_quantity = 50
-WHERE id = 1;
+WHERE id = 10;
 
-SELECT stock_quantity, price FROM products WHERE id = 4; 
+UPDATE products SET price = 219.99
+WHERE id = 12;
+
+SELECT * FROM products;
