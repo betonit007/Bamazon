@@ -88,6 +88,17 @@ function viewLowInventory() {
 }
 
 function newProduct() {
+    var depts = [];
+
+    connection.query(
+        "SELECT department_name FROM departments", function(err, res) {
+         for (i in res) {
+             if (depts.indexOf(res[i].department_name) < 0) {
+              depts.push(res[i].department_name);
+             }
+         }
+        }
+    )
     inquirer.prompt([
     {
         name: "prodDesc",
@@ -98,7 +109,7 @@ function newProduct() {
         name: "dept",
         type: "list",
         message: "Please select a department for the item.",
-        choices: ["Toys", "Hardgoods", "Electronics"]
+        choices: depts
     },
     {
         name: "price",
@@ -123,7 +134,8 @@ function newProduct() {
               product_name: answer.prodDesc,
               department_name: answer.dept,
               price: answer.price,
-              stock_quantity: answer.amount
+              stock_quantity: answer.amount,
+              product_sales: 0
           },
           function(err) {
               if (err) throw err;

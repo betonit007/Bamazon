@@ -95,6 +95,17 @@ function purchase(left, quantity, price, id) {
     else {
         total = total + (quantity * price);
         connection.query(
+            "UPDATE products SET product_sales = product_sales + " + (quantity * price) + " WHERE ?",
+            [
+                {
+                    id: id
+                }
+            ],
+            function(err){
+                if(err) throw err;
+            }
+        )
+        connection.query(
             "UPDATE products SET stock_quantity = stock_quantity -  " + quantity + " WHERE ?", 
             [
             {
@@ -108,7 +119,7 @@ function purchase(left, quantity, price, id) {
             
                 name: "confirm",
                 type: "rawlist",
-                message: "\nPurchase Complete! Your total for this item is: $" + quantity * price + ". Would you like to make another purchase?",
+                message: "\nPurchase Complete! Your total for this item is: $" + (quantity * price).toFixed(2) + ". Would you like to make another purchase?",
                 choices: ["Yes", "No"]
             }).then(function(answer) {
                 if(answer.confirm === "No") {
