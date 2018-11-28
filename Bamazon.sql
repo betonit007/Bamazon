@@ -34,17 +34,7 @@ WHERE id = 12;
 
 SELECT * FROM products;
 
-SELECT  *
-FROM (
-
-	SELECT department_name, SUM(product_sales) AS total_sales
-	from products
-	GROUP BY department_name
-
-)
-JOIN (
-     SELECT department_id, department_name, over_head_costs
-     from departments
-	
-     )
-ON departments.department_name = products.department_name
+SELECT *
+FROM (SELECT department_id, department_name, over_head_costs from departments) AS dept
+LEFT JOIN (SELECT department_name, SUM(product_sales) AS product_sales from products GROUP BY department_name) AS prod
+ON prod.department_name = dept.department_name;
